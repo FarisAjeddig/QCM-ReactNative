@@ -1,19 +1,27 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation'
+import FrenchGame from '../Screens/FrenchGame'
+import QuebecGame from '../Screens/QuebecGame'
 import Home from '../Screens/Home'
-import Settings from '../Screens/Settings'
 
 const SearchStackNavigator = createStackNavigator({
 
   Home: {
     screen: Home,
-    navigationOptions: {
-      title: 'Accueil'
+    navigationOptions: {
+      title: "Page d'accueil - Bienvenue"
     }
   },
-  Settings: {
-    screen: Settings,
+
+  FrenchGame: {
+    screen: FrenchGame,
+    navigationOptions: {
+      title: 'Mode Français'
+    }
+  },
+  QuebecGame: {
+    screen: QuebecGame,
     navigationOptions: {
-      title: 'Options'
+      title: 'Mode Quebecois'
     }
   }
 })

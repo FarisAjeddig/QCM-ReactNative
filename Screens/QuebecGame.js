@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { View, Text, Button } from 'react-native';
 
-export class Settings extends Component {
+export class QuebecGame extends Component {
   render() {
     return (
       <View>
-        <Text>This is the Settings screen</Text>
+        <Text>This is the QuebecGame screen</Text>
       </View>
     )
   }
 };
 
-export default Settings;
+export default QuebecGame;
