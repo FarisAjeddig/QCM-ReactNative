@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.rnnavigation",
+    package = "com.qcmreactnative",
 )
 
 android_resource(
     name = "res",
-    package = "com.rnnavigation",
+    package = "com.qcmreactnative",
     res = "src/main/res",
 )
 
