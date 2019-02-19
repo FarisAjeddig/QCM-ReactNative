@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { Alert, View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-ionicons'
+import { connect } from 'react-redux'
 
 const data = [
   {
@@ -47,23 +48,35 @@ const data = [
   }
 ]
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
+function getRandomInt(max, ensDoesNotAppart) { // ensDoesNotAppart est le tableau d'éléments auquel ne doit pas appartenir le résultat.
+  if (ensDoesNotAppart.length == max){
+    return false
+  } else {
+    start = Math.floor(Math.random() * Math.floor(max));
+    while (true){
+      console.log(start);
+      if (ensDoesNotAppart.indexOf(start) == -1){
+        return start
+      } else {
+        start = Math.floor(Math.random() * Math.floor(max));
+      }
+    }
+  }
 }
-
-var start = getRandomInt(data.length)
 
 export class FrenchGame extends Component {
 
   getInitialState = () => {
-     const initialState = {
-       numberOfLife: 5,
-       QuestionAlreadyAsk: [start],
-       question: data[start].question,
-       answers: data[start].answers,
-       end: false
-     };
-     return initialState;
+    start = getRandomInt(data.length, []);
+
+    const initialState = {
+      numberOfLife: 5,
+      QuestionAlreadyAsk: [start],
+      question: data[start].question,
+      answers: data[start].answers,
+      end: false
+    };
+    return initialState;
   }
 
   constructor (props) {
@@ -75,6 +88,24 @@ export class FrenchGame extends Component {
     this.setState(this.getInitialState());
   }
 
+  _skipQuestion(){
+    if (this.state.end || this.state.numberOfLife == 0){
+      Alert.alert("Vous avez déjà fini ou perdu le jeu.")
+    } else {
+      Alert.alert("Vous venez de passer la question, et de perdre une vie.");
+      if (data.length == this.state.QuestionAlreadyAsk.length){
+        this.setState({end: true})
+        } else {
+          start = getRandomInt(data.length, this.state.QuestionAlreadyAsk);
+          this.setState({
+            QuestionAlreadyAsk: [ ...this.state.QuestionAlreadyAsk, ...[start]],
+            question: data[start].question,
+            answers: data[start].answers,
+            numberOfLife: this.state.numberOfLife-1
+          })
+        }
+      }
+    }
 
   _displayIfStillLives(){
     if (this.state.numberOfLife > 0){
@@ -91,7 +122,7 @@ export class FrenchGame extends Component {
                       this.setState({end: true})
                     }
                     else {
-                      start = getRandomInt(data.length)
+                      start = getRandomInt(data.length, this.state.QuestionAlreadyAsk)
                       this.setState({
                         QuestionAlreadyAsk: [ ...this.state.QuestionAlreadyAsk, ...[start]],
                         question: data[start].question,
@@ -121,6 +152,7 @@ export class FrenchGame extends Component {
   }
 
   render() {
+
     const end = this.state.end
     let Game;
 
@@ -142,7 +174,9 @@ export class FrenchGame extends Component {
         <TouchableOpacity style={{alignItems: 'center', justifyContent: 'flex-end'}} onPress={() => this._getBackToInitialState()}>
           <Image style={{width: 50, height: 50}} source={require('../Fonts/replay.png')} />
         </TouchableOpacity>
-        <Button onPress={() => this.props.navigation.navigate('QuebecGame')} title="Mode Quebecois"/>
+        <TouchableOpacity style={{alignItems: 'center', justifyContent: 'flex-end'}} onPress={() => this._skipQuestion()}>
+          <Text>Skip</Text>
+        </TouchableOpacity>
       </View>
     )
   }
