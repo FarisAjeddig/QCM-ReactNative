@@ -1,4 +1,5 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation'
+import { fromLeft } from 'react-navigation-transitions';
 import FrenchGame from '../Screens/FrenchGame'
 import QuebecGame from '../Screens/QuebecGame'
 import Home from '../Screens/Home'
@@ -24,6 +25,9 @@ const SearchStackNavigator = createStackNavigator({
       title: 'Mode Quebecois'
     }
   }
+},{
+  initialRouteName: 'Home',
+  transitionConfig: () => fromLeft()
 })
 
 export default createAppContainer(SearchStackNavigator)

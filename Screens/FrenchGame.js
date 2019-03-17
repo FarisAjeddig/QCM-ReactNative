@@ -4,49 +4,7 @@ import React, { Component } from 'react';
 import { Alert, View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-ionicons'
 import { connect } from 'react-redux'
-
-const data = [
-  {
-    question: "Question 1",
-    answers:
-    [{key: 'a', value: 'Réponse 1A (bonne)', answer: true},
-    {key: 'b', value: 'Réponse 1B', answer: false},
-    {key: "c", value: "Réponse 1C", answer: false},
-    {key: 'd', value: 'Réponse 1D', answer: false}]
-  },
-  {
-    question: "Question 2",
-    answers:
-    [{key: 'a', value: 'Réponse 2A (bonne)', answer: true},
-    {key: 'b', value: 'Réponse 2B', answer: false},
-    {key: "c", value: "Réponse 2C", answer: false},
-    {key: 'd', value: 'Réponse 2D', answer: false}]
-  },
-  {
-    question: "Question 3",
-    answers:
-    [{key: 'a', value: 'Réponse 3A (bonne)', answer: true},
-    {key: 'b', value: 'Réponse 3B', answer: false},
-    {key: "c", value: "Réponse 3C", answer: false},
-    {key: 'd', value: 'Réponse 3D', answer: false}]
-  },
-  {
-    question: "Question 4",
-    answers:
-    [{key: 'a', value: 'Réponse 4A (bonne)', answer: true},
-    {key: 'b', value: 'Réponse 4B', answer: false},
-    {key: "c", value: "Réponse 4C", answer: false},
-    {key: 'd', value: 'Réponse 4D', answer: false}]
-  },
-  {
-    question: "Question 5",
-    answers:
-    [{key: 'a', value: 'Réponse 5A (bonne)', answer: true},
-    {key: 'b', value: 'Réponse 5B', answer: false},
-    {key: "c", value: "Réponse 5C", answer: false},
-    {key: 'd', value: 'Réponse 5D', answer: false}]
-  }
-]
+import data from '../Data/data'
 
 function getRandomInt(max, ensDoesNotAppart) { // ensDoesNotAppart est le tableau d'éléments auquel ne doit pas appartenir le résultat.
   if (ensDoesNotAppart.length == max){
@@ -74,7 +32,9 @@ export class FrenchGame extends Component {
       QuestionAlreadyAsk: [start],
       question: data[start].question,
       answers: data[start].answers,
-      end: false
+      end: false,
+      colorAnswer: "#1f3955",
+      colorWrongAnswer: "#1f3955"
     };
     return initialState;
   }
@@ -107,6 +67,13 @@ export class FrenchGame extends Component {
       }
     }
 
+  _wait(ms){
+    var d = new Date();
+    var d2 = null;
+    do { d2 = new Date(); }
+    while(d2-d < ms);
+    }
+
   _displayIfStillLives(){
     if (this.state.numberOfLife > 0){
       return (
@@ -114,31 +81,32 @@ export class FrenchGame extends Component {
           data={this.state.answers}
           renderItem={({item}) =>
             <View style={styles.answer}>
-              <Button
-                onPress={() => {
-                  if (item.answer){
-                    Alert.alert("Bonne réponse");
-                    if (data.length == this.state.QuestionAlreadyAsk.length){
-                      this.setState({end: true})
+                <Button
+                  onPress={() => {
+                    if (item.answer){
+                      this.setState({colorAnswer: "green"})
+                      // {this._wait(2000)}
+                      if (data.length == this.state.QuestionAlreadyAsk.length){
+                        this.setState({end: true, colorAnswer: "1f3955"})
+                      }
+                      else {
+                        start = getRandomInt(data.length, this.state.QuestionAlreadyAsk)
+                        this.setState({
+                          QuestionAlreadyAsk: [ ...this.state.QuestionAlreadyAsk, ...[start]],
+                          question: data[start].question,
+                          answers: data[start].answers,
+                          colorAnswer: "#1f3955"
+                        })
+                      }
                     }
                     else {
-                      start = getRandomInt(data.length, this.state.QuestionAlreadyAsk)
-                      this.setState({
-                        QuestionAlreadyAsk: [ ...this.state.QuestionAlreadyAsk, ...[start]],
-                        question: data[start].question,
-                        answers: data[start].answers
-                      })
+                      const newNumberOfLife = this.state.numberOfLife-1
+                      this.setState({numberOfLife: newNumberOfLife })
                     }
-                  }
-                  else {
-                    const newNumberOfLife = this.state.numberOfLife-1
-                    this.setState({numberOfLife: newNumberOfLife })
-                    Alert.alert("Mauvaise réponse");
-                  }
-                }}
-                title={item.value}
-                color="#1f3955"
-              />
+                  }}
+                  title={item.value}
+                  color={(item.answer) ? this.state.colorAnswer : this.state.colorWrongAnswer}
+                />
             </View>
             }
         />
