@@ -3,10 +3,10 @@
 import React, { Component } from 'react';
 import { Alert, View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-ionicons'
-import { connect } from 'react-redux'
 import data from '../Data/data'
 
-function getRandomInt(max, ensDoesNotAppart) { // ensDoesNotAppart est le tableau d'éléments auquel ne doit pas appartenir le résultat.
+
+function getRandomInt(max, ensDoesNotAppart){ // ensDoesNotAppart est le tableau d'éléments auquel ne doit pas appartenir le résultat.
   if (ensDoesNotAppart.length == max){
     return false
   } else {
@@ -85,6 +85,7 @@ export class FrenchGame extends Component {
                   onPress={() => {
                     if (item.answer){
                       this.setState({colorAnswer: "green"})
+                      Alert.alert('Bonne réponse')
                       // {this._wait(2000)}
                       if (data.length == this.state.QuestionAlreadyAsk.length){
                         this.setState({end: true, colorAnswer: "1f3955"})
@@ -100,6 +101,7 @@ export class FrenchGame extends Component {
                       }
                     }
                     else {
+                      Alert.alert('Mauvaise réponse')
                       const newNumberOfLife = this.state.numberOfLife-1
                       this.setState({numberOfLife: newNumberOfLife })
                     }
@@ -133,6 +135,7 @@ export class FrenchGame extends Component {
     return (
       <View>
         <View style={{flexDirection: 'row', marginTop: 20}}>
+        <Text>Level {this.props.navigation.getParam('level')}</Text>
           <View style={styles.question}>
             <Text style={{fontSize: 26, textAlign: 'center'}}>{this.state.question}</Text>
           </View>

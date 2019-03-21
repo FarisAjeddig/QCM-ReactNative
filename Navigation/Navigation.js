@@ -3,6 +3,7 @@ import { fromLeft } from 'react-navigation-transitions';
 import FrenchGame from '../Screens/FrenchGame'
 import QuebecGame from '../Screens/QuebecGame'
 import Home from '../Screens/Home'
+import ChooseLevel from '../Screens/ChooseLevel'
 
 const SearchStackNavigator = createStackNavigator({
 
@@ -10,6 +11,13 @@ const SearchStackNavigator = createStackNavigator({
     screen: Home,
     navigationOptions: {
       title: "Page d'accueil - Bienvenue"
+    }
+  },
+
+  ChooseLevel: {
+    screen: ChooseLevel,
+    navigationOptions: {
+      title: "Choix du niveau"
     }
   },
 

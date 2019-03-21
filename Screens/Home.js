@@ -6,8 +6,12 @@ export class Home extends Component {
     return (
       <View>
         <Text>Bienvenue dans notre jeu !</Text>
-        <Button onPress={() => this.props.navigation.navigate('QuebecGame')} title="Mode Quebecois"/>
-        <Button onPress={() => this.props.navigation.navigate('FrenchGame')} title="Mode Français"/>
+        <Button onPress={() => this.props.navigation.navigate('ChooseLevel', {
+          mode: 'QC'
+        })} title="Mode Quebecois"/>
+        <Button onPress={() => this.props.navigation.navigate('ChooseLevel', {
+          mode: 'FR'
+        })} title="Mode Français"/>
       </View>
     )
   }
