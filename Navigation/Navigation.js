@@ -24,15 +24,10 @@ const SearchStackNavigator = createStackNavigator({
   FrenchGame: {
     screen: FrenchGame,
     navigationOptions: {
-      title: 'Mode Français'
+      title: 'Jouez'
     }
   },
-  QuebecGame: {
-    screen: QuebecGame,
-    navigationOptions: {
-      title: 'Mode Quebecois'
-    }
-  }
+
 },{
   initialRouteName: 'Home',
   transitionConfig: () => fromLeft()

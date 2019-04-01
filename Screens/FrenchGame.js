@@ -1,5 +1,3 @@
-// Home.js
-
 import React, { Component } from 'react';
 import { Alert, View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-ionicons'
