@@ -6,11 +6,7 @@ export class ChooseLevel extends Component {
 
     mode = this.props.navigation.getParam('mode')
 
-    if (mode == "QC"){
-      game='FrenchGame'
-    } else {
-      game='FrenchGame'
-    }
+    let game='FrenchGame'
 
     return (
       <ImageBackground style={{flex: 1}} source={require('../Fonts/background-orange.jpeg')} >

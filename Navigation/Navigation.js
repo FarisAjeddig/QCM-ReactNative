@@ -1,7 +1,6 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import { fromLeft } from 'react-navigation-transitions';
 import FrenchGame from '../Screens/FrenchGame'
-import QuebecGame from '../Screens/QuebecGame'
 import Home from '../Screens/Home'
 import ChooseLevel from '../Screens/ChooseLevel'
 

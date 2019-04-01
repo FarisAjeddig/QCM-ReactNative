@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Alert, View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Alert, View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import Icon from 'react-native-ionicons'
-import data from '../Data/data'
+import datas from '../Data/data'
 
+// var data = datas.Qc_Level_1;
 
 function getRandomInt(max, ensDoesNotAppart){ // ensDoesNotAppart est le tableau d'éléments auquel ne doit pas appartenir le résultat.
   if (ensDoesNotAppart.length == max){
@@ -20,16 +21,37 @@ function getRandomInt(max, ensDoesNotAppart){ // ensDoesNotAppart est le tableau
   }
 }
 
-export class FrenchGame extends Component {
+function shuffle(arr) {
+    var i,
+        j,
+        temp;
+    for (i = arr.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    return arr;
+};
 
+export class FrenchGame extends Component {
   getInitialState = () => {
+
+    if (this.props.navigation.getParam('mode') == 'FR'){
+      let dataName = "Francais_Level_" + this.props.navigation.getParam('level');
+      data = datas[dataName]
+    } else {
+      let dataName = "Qc_Level_" + this.props.navigation.getParam('level');
+      data = datas[dataName]
+    }
+
     start = getRandomInt(data.length, []);
 
     const initialState = {
-      numberOfLife: 5,
+      numberOfLife: 2,
       QuestionAlreadyAsk: [start],
       question: data[start].question,
-      answers: data[start].answers,
+      answers: shuffle(data[start].answers),
       end: false,
       colorAnswer: "#1f3955",
       colorWrongAnswer: "#1f3955"
@@ -45,6 +67,11 @@ export class FrenchGame extends Component {
   _getBackToInitialState(){
     this.setState(this.getInitialState());
   }
+
+  componentDidMount(){
+    this.getInitialState();
+  }
+
 
   _skipQuestion(){
     if (this.state.end || this.state.numberOfLife == 0){
@@ -76,10 +103,10 @@ export class FrenchGame extends Component {
     if (this.state.numberOfLife > 0){
       return (
         <FlatList
-          data={this.state.answers}
+          data={shuffle(this.state.answers)}
           renderItem={({item}) =>
             <View style={styles.answer}>
-                <Button
+                <TouchableOpacity
                   onPress={() => {
                     if (item.answer){
                       this.setState({colorAnswer: "green"})
@@ -106,7 +133,9 @@ export class FrenchGame extends Component {
                   }}
                   title={item.value}
                   color={(item.answer) ? this.state.colorAnswer : this.state.colorWrongAnswer}
-                />
+                >
+                  <Text style={styles.textAnswer}>{item.value}</Text>
+                </TouchableOpacity>
             </View>
             }
         />
@@ -131,22 +160,32 @@ export class FrenchGame extends Component {
     }
 
     return (
-      <View>
-        <View style={{flexDirection: 'row', marginTop: 20}}>
-        <Text>Level {this.props.navigation.getParam('level')}</Text>
+      <ImageBackground style={{flex: 1}} source={require('../Fonts/background-2.jpeg')} >
+
+        <View style={{flexDirection: 'column', flex: 1}}>
+
+          <View style={{flexDirection: 'row', marginTop: 20, flex:1}}>
+            {/*<Text style={{flex: 1}}>Level {this.props.navigation.getParam('level')}, mode {this.props.navigation.getParam('mode')}</Text>*/}
+            <TouchableOpacity style={{flex:1, alignItems: 'center'}} onPress={() => this._skipQuestion()}>
+              <Text>Skip</Text>
+            </TouchableOpacity>
+            <Text style={styles.numberLife}>{this.state.numberOfLife} vies restantes ! </Text>
+          </View>
+
           <View style={styles.question}>
             <Text style={{fontSize: 26, textAlign: 'center'}}>{this.state.question}</Text>
           </View>
-          <Text style={styles.numberLife}>{this.state.numberOfLife} vies restantes ! </Text>
+          <View style={{flex: 2}}>
+            {Game}
+          </View>
+
+          <TouchableOpacity style={{alignItems: 'center', justifyContent: 'flex-end'}} onPress={() => this._getBackToInitialState()}>
+            <Image style={{width: 50, height: 50}} source={require('../Fonts/replay.png')} />
+          </TouchableOpacity>
+
         </View>
-        {Game}
-        <TouchableOpacity style={{alignItems: 'center', justifyContent: 'flex-end'}} onPress={() => this._getBackToInitialState()}>
-          <Image style={{width: 50, height: 50}} source={require('../Fonts/replay.png')} />
-        </TouchableOpacity>
-        <TouchableOpacity style={{alignItems: 'center', justifyContent: 'flex-end'}} onPress={() => this._skipQuestion()}>
-          <Text>Skip</Text>
-        </TouchableOpacity>
-      </View>
+
+      </ImageBackground>
     )
   }
 }
@@ -157,14 +196,26 @@ const styles = StyleSheet.create({
     color: 'rgb(195, 18, 18)'
   },
   question: {
-    flex: 2,
+    flex: 1,
     color: 'rgb(233, 166, 86)',
-    marginBottom: 20
+    marginBottom: 0
   },
   answer: {
-    flex: 1,
+    flex: 0.25,
     marginTop: 10,
     marginBottom: 10
+  },
+  textAnswer: {
+    textAlign: 'center',
+    justifyContent: 'center',
+    borderRadius: 500,
+    borderWidth: 1,
+    borderColor: 'white',
+    color: '#1f3955',
+    padding : 5,
+    fontSize: 15,
+    marginRight: 30,
+    marginLeft: 30
   }
 })
 
