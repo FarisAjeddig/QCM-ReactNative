@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { ScrollView, View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, Alert } from 'react-native';
 
 export class ChooseLevel extends Component {
   render() {
@@ -55,15 +55,11 @@ export class ChooseLevel extends Component {
           <Text style={styles.text}>Level 7</Text>
           </TouchableOpacity>
           {mode == "FR" ?
-          (<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate(game, {
-            level: 8,
-            mode: this.mode
-          })} title="Level 8">
+          (<TouchableOpacity style={styles.button} onPress={() => Alert.alert("Pas encore de level 8")} title="Level 8">
               <Text style={styles.text}>Level 8</Text>
             </TouchableOpacity>
         ) : (<Text></Text>)
         }
-
         </ScrollView>
       </ImageBackground>
     )
