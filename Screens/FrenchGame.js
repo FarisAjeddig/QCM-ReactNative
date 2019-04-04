@@ -3,7 +3,6 @@ import { Alert, View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Imag
 import Icon from 'react-native-vector-icons/FontAwesome'
 import datas from '../Data/data'
 
-// var data = datas.Qc_Level_1;
 
 function getRandomInt(max, ensDoesNotAppart){ // ensDoesNotAppart est le tableau d'éléments auquel ne doit pas appartenir le résultat.
   if (ensDoesNotAppart.length == max){
@@ -35,7 +34,8 @@ function shuffle(arr) {
 
 export class FrenchGame extends Component {
 
-  numberOfLife = 2;
+  // Nombre de vie initiale pour le jeu
+  numberOfLife = 6;
 
   getInitialState = () => {
 
@@ -145,7 +145,10 @@ export class FrenchGame extends Component {
     }
     else {
       return (
-        <Text style={{fontSize: 25, textAlign: 'center'}}>Perdu ! </Text>
+        <View>
+          <Text style={{fontSize: 20, textAlign: 'center'}}>Vous avez perdu</Text>
+          <Text style={{fontSize: 16, textAlign: 'center'}}>Cliquez sur le bouton en bas pour réessayer</Text>
+        </View>
       )
     }
   }
@@ -153,10 +156,15 @@ export class FrenchGame extends Component {
   render() {
 
     const end = this.state.end
+    const level = this.props.navigation.getParam('level')
 
     let Game;
     if (end) {
-        Game = <Text>Fini</Text>;
+        Game = (
+          <View>
+            <Text style={{textAlign: 'center', justifyContent: 'center'}}>Félicitation, vous avez débloqué le niveau {this.props.navigation.getParam('level')+1}.</Text>
+          </View>
+          );
     } else {
         Game = this._displayIfStillLives();
     }
@@ -188,14 +196,15 @@ export class FrenchGame extends Component {
           </View>
 
           <View style={styles.question}>
-            <Text style={{fontSize: 26, textAlign: 'center'}}>{this.state.question}</Text>
+            {!end ? (<Text style={{fontSize: 26, textAlign: 'center'}}>{this.state.question}</Text>) : (<Text></Text>)}
           </View>
           <View style={{flex: 2}}>
             {Game}
           </View>
 
           <TouchableOpacity style={{alignItems: 'center', justifyContent: 'flex-end'}} onPress={() => this._getBackToInitialState()}>
-            <Image style={{width: 50, height: 50}} source={require('../Fonts/replay.png')} />
+            {/*<Image style={{width: 50, height: 50}} source={require('../Fonts/replay.png')} />*/}
+            <Icon name="retweet" size={50} />
           </TouchableOpacity>
 
         </View>
