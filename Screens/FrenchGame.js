@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Alert, View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
-import Icon from 'react-native-ionicons'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import datas from '../Data/data'
 
 // var data = datas.Qc_Level_1;
@@ -21,10 +21,9 @@ function getRandomInt(max, ensDoesNotAppart){ // ensDoesNotAppart est le tableau
   }
 }
 
+// Mélange un tableau
 function shuffle(arr) {
-    var i,
-        j,
-        temp;
+    var i, j, temp;
     for (i = arr.length - 1; i > 0; i--) {
         j = Math.floor(Math.random() * (i + 1));
         temp = arr[i];
@@ -35,6 +34,9 @@ function shuffle(arr) {
 };
 
 export class FrenchGame extends Component {
+
+  numberOfLife = 2;
+
   getInitialState = () => {
 
     if (this.props.navigation.getParam('mode') == 'FR'){
@@ -48,7 +50,7 @@ export class FrenchGame extends Component {
     start = getRandomInt(data.length, []);
 
     const initialState = {
-      numberOfLife: 2,
+      numberOfLife: this.numberOfLife,
       QuestionAlreadyAsk: [start],
       question: data[start].question,
       answers: shuffle(data[start].answers),
@@ -151,12 +153,22 @@ export class FrenchGame extends Component {
   render() {
 
     const end = this.state.end
-    let Game;
 
+    let Game;
     if (end) {
         Game = <Text>Fini</Text>;
     } else {
         Game = this._displayIfStillLives();
+    }
+
+    let Lifes = [];
+    for (let i=0; i<this.state.numberOfLife; i++){
+      Lifes.push(<Icon name="heart" size={40} color="red" />)
+    }
+    if (this.state.numberOfLife < this.numberOfLife){
+      for (i = this.state.numberOfLife; i<this.numberOfLife; i++){
+        Lifes.push(<Icon name="heart" size={40} color="black" />)
+      }
     }
 
     return (
@@ -166,10 +178,13 @@ export class FrenchGame extends Component {
 
           <View style={{flexDirection: 'row', marginTop: 20, flex:1}}>
             {/*<Text style={{flex: 1}}>Level {this.props.navigation.getParam('level')}, mode {this.props.navigation.getParam('mode')}</Text>*/}
+            <Text style={styles.numberLife}>
+              {Lifes}
+            </Text>
             <TouchableOpacity style={{flex:1, alignItems: 'center'}} onPress={() => this._skipQuestion()}>
+              <Icon name="arrow-right" size={40} color="black" />
               <Text>Skip</Text>
             </TouchableOpacity>
-            <Text style={styles.numberLife}>{this.state.numberOfLife} vies restantes ! </Text>
           </View>
 
           <View style={styles.question}>
@@ -193,7 +208,7 @@ export class FrenchGame extends Component {
 const styles = StyleSheet.create({
   numberLife: {
     flex: 1,
-    color: 'rgb(195, 18, 18)'
+    marginLeft: 50
   },
   question: {
     flex: 1,

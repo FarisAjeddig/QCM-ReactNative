@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground } from 'react-native';
 
 export class Home extends Component {
+
+  componentDidMount(){
+    this.props.navigation.navigate('FrenchGame', {
+      mode: 'FR',
+      level: 3
+    })
+  }
+
   render() {
     return (
       <ImageBackground style={{flex: 1}} source={require('../Fonts/background-orange.jpeg')} >
