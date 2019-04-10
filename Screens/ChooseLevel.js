@@ -1,7 +1,80 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, Alert } from 'react-native';
+import { ScrollView, View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, Alert, AsyncStorage } from 'react-native';
 
 export class ChooseLevel extends Component {
+
+  constructor (props) {
+    super(props)
+    this.state={
+      FrenchUnlock: [],
+      QuebecUnlock: []
+    }
+  }
+
+  async setDataToAsyncStorage(keys, values){
+    for (i=0; i<keys.length; i++){
+      AsyncStorage.setItem(keys[i], values[i]);
+      Alert.alert("setSuccess");
+    }
+  };
+
+  componentDidMount = () => {
+
+    // let keys = ['FrenchUnlock', 'QuebecUnlock'];
+    //
+    // AsyncStorage.multiGet(keys, (err, stores) => {
+    //   stores.map((result, i, store) => {
+    //     Alert.alert(store[0][0])
+    //     switch (store[i][0]) {
+    //       case 'FrenchUnlock':
+    //         this.setState({FrenchUnlock: store[i][1]})
+    //         break;
+    //       case 'QuebecUnlock':
+    //         this.setState({QuebecUnlock: store[i][1]})
+    //         break;
+    //       default:
+    //         break;
+    //     }
+    //   })
+    // })
+    // AsyncStorage.getItem('FrenchUnlock').then((value) => {
+    //   if (value !== null){
+    //     Alert.alert(value)
+    //     Alert.alert("valueNotNull")
+    //   } else {
+    //     Alert.alert("valueNull")
+    //     let keys = [
+    //         'FrenchUnlock',
+    //         'QuebecUnlock'
+    //       ];
+    //
+    //       let values = [
+    //             [
+    //               true,
+    //               false,
+    //               false,
+    //               false,
+    //               false,
+    //               false,
+    //               false,
+    //           ],
+    //           [
+    //             true,
+    //             false,
+    //             false,
+    //             false,
+    //             false,
+    //             false,
+    //             false,
+    //         ]
+    //       ]
+    //
+    //     this.setDataToAsyncStorage(keys, values);
+    //
+    //   }
+    // });
+  }
+
   render() {
 
     mode = this.props.navigation.getParam('mode')

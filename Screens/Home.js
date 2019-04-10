@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, AsyncStorage, FlatList, Alert, Button, StyleSheet } from 'react-native';
+
+
 
 export class Home extends Component {
 
-  componentDidMount(){
-    this.props.navigation.navigate('FrenchGame', {
-      mode: 'FR',
-      level: 3
-    })
-  }
 
   render() {
     return (
@@ -35,4 +31,4 @@ export class Home extends Component {
   }
 };
 
-export default Home;
+export default Home

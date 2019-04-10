@@ -1,7 +1,21 @@
 import React, { Component } from 'react';
-import { Alert, View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import {
+  Alert,
+  View,
+  Text,
+  Button,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ImageBackground,
+  AsyncStorage
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import datas from '../Data/data'
+import { connect } from 'react-redux';
+import { unlockLevel } from '../Actions/level'
+import { UNLOCK_LEVEL } from '../Actions/types';
 
 
 function getRandomInt(max, ensDoesNotAppart){ // ensDoesNotAppart est le tableau d'éléments auquel ne doit pas appartenir le résultat.
@@ -10,7 +24,6 @@ function getRandomInt(max, ensDoesNotAppart){ // ensDoesNotAppart est le tableau
   } else {
     start = Math.floor(Math.random() * Math.floor(max));
     while (true){
-      console.log(start);
       if (ensDoesNotAppart.indexOf(start) == -1){
         return start
       } else {
@@ -66,6 +79,7 @@ export class FrenchGame extends Component {
     this.state=this.getInitialState()
   }
 
+
   _getBackToInitialState(){
     this.setState(this.getInitialState());
   }
@@ -74,6 +88,10 @@ export class FrenchGame extends Component {
     this.getInitialState();
   }
 
+  componentDidUpdate(){
+    console.log(this.props);
+    console.log(this.state);
+  }
 
   _skipQuestion(){
     if (this.state.end || this.state.numberOfLife == 0){
@@ -116,6 +134,7 @@ export class FrenchGame extends Component {
                       // {this._wait(2000)}
                       if (data.length == this.state.QuestionAlreadyAsk.length){
                         this.setState({end: true, colorAnswer: "1f3955"})
+                        this._unlockLevel()
                       }
                       else {
                         start = getRandomInt(data.length, this.state.QuestionAlreadyAsk)
@@ -153,18 +172,35 @@ export class FrenchGame extends Component {
     }
   }
 
+  async setDataToAsyncStorage(keys, values){
+    for (i=0; i<keys.length; i++){
+      AsyncStorage.setItem(keys[i], values[i]);
+    }
+  };
+
+  _unlockLevel(){
+    console.log("Dans la fonction unlock");
+    const action = {
+      type: UNLOCK_LEVEL,
+      value: {
+        level: 1
+      }}
+    this.props.dispatch(action)
+  }
+
   render() {
 
     const end = this.state.end
     const level = this.props.navigation.getParam('level')
 
+
     let Game;
     if (end) {
-        Game = (
-          <View>
-            <Text style={{textAlign: 'center', justifyContent: 'center'}}>Félicitation, vous avez débloqué le niveau {this.props.navigation.getParam('level')+1}.</Text>
-          </View>
-          );
+      Game = (
+        <View>
+          <Text style={{textAlign: 'center', justifyContent: 'center'}}>Félicitation, vous avez débloqué le niveau {this.props.navigation.getParam('level')+1}.</Text>
+        </View>
+      );
     } else {
         Game = this._displayIfStillLives();
     }
@@ -179,6 +215,8 @@ export class FrenchGame extends Component {
       }
     }
 
+    console.log(this.props)
+
     return (
       <ImageBackground style={{flex: 1}} source={require('../Fonts/background-2.jpeg')} >
 
@@ -187,7 +225,8 @@ export class FrenchGame extends Component {
           <View style={{flexDirection: 'row', marginTop: 20, flex:1}}>
             {/*<Text style={{flex: 1}}>Level {this.props.navigation.getParam('level')}, mode {this.props.navigation.getParam('mode')}</Text>*/}
             <Text style={styles.numberLife}>
-              {Lifes}
+              {/*Lifes*/}
+              {/*this.props.level[0]*/}
             </Text>
             <TouchableOpacity style={{flex:1, alignItems: 'center'}} onPress={() => this._skipQuestion()}>
               <Icon name="arrow-right" size={40} color="black" />
@@ -243,4 +282,11 @@ const styles = StyleSheet.create({
   }
 })
 
-export default FrenchGame
+const mapStateToProps = state => {
+  return {
+    level: state.level
+  }
+}
+
+
+export default connect(mapStateToProps)(FrenchGame)
