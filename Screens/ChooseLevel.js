@@ -1,138 +1,85 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, Alert, AsyncStorage } from 'react-native';
+import { ScrollView, View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, Alert } from 'react-native';
+import { connect } from 'react-redux';
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 export class ChooseLevel extends Component {
 
   constructor (props) {
     super(props)
-    this.state={
-      FrenchUnlock: [],
-      QuebecUnlock: []
-    }
   }
 
-  async setDataToAsyncStorage(keys, values){
-    for (i=0; i<keys.length; i++){
-      AsyncStorage.setItem(keys[i], values[i]);
-      Alert.alert("setSuccess");
+
+  componentDidMount(){
+    console.log(this.props);
+  }
+
+  _onClickLevel = (level) => {
+    if ((mode === 'QC' && level <= this.props.level.levelQc) || (mode === 'FR' && level <= this.props.level.level)){
+      this.props.navigation.navigate('FrenchGame', {
+        level: level,
+        mode: {mode}
+      })
+    } else {
+      console.log(mode);
+      Alert.alert("Vous n'avez pas encore débloqué ce niveau.")
     }
-  };
 
-  componentDidMount = () => {
-
-    // let keys = ['FrenchUnlock', 'QuebecUnlock'];
-    //
-    // AsyncStorage.multiGet(keys, (err, stores) => {
-    //   stores.map((result, i, store) => {
-    //     Alert.alert(store[0][0])
-    //     switch (store[i][0]) {
-    //       case 'FrenchUnlock':
-    //         this.setState({FrenchUnlock: store[i][1]})
-    //         break;
-    //       case 'QuebecUnlock':
-    //         this.setState({QuebecUnlock: store[i][1]})
-    //         break;
-    //       default:
-    //         break;
-    //     }
-    //   })
-    // })
-    // AsyncStorage.getItem('FrenchUnlock').then((value) => {
-    //   if (value !== null){
-    //     Alert.alert(value)
-    //     Alert.alert("valueNotNull")
-    //   } else {
-    //     Alert.alert("valueNull")
-    //     let keys = [
-    //         'FrenchUnlock',
-    //         'QuebecUnlock'
-    //       ];
-    //
-    //       let values = [
-    //             [
-    //               true,
-    //               false,
-    //               false,
-    //               false,
-    //               false,
-    //               false,
-    //               false,
-    //           ],
-    //           [
-    //             true,
-    //             false,
-    //             false,
-    //             false,
-    //             false,
-    //             false,
-    //             false,
-    //         ]
-    //       ]
-    //
-    //     this.setDataToAsyncStorage(keys, values);
-    //
-    //   }
-    // });
   }
 
   render() {
 
     mode = this.props.navigation.getParam('mode')
 
-    let game='FrenchGame'
-
     return (
       <ImageBackground style={{flex: 1}} source={require('../Fonts/background-orange.jpeg')} >
         <ScrollView style={{flex: 1}}>
           <Text style={{textAlign: 'center', fontSize: 20}}>Choisissez votre niveau : Mode {mode}</Text>
-          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate(game, {
-            level: 1,
-            mode: this.mode
-          })} title="Level 1">
+          <TouchableOpacity style={styles.button} onPress={() => this._onClickLevel(1)} title="Level 1">
           <Text style={styles.text}>Level 1</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate(game, {
-            level: 2,
-            mode: this.mode
-          })} title="Level 2">
-          <Text style={styles.text}>Level 2</Text>
+          <TouchableOpacity style={styles.button} onPress={() => this._onClickLevel(2)} title="Level 2">
+            <View style={{flexDirection:'row'}}>
+              <Text style={styles.text}>Level 2
+              </Text>
+              {!((mode === 'QC' && 2 <= this.props.level.levelQc) || (mode === 'FR' && 2 <= this.props.level.level)) && (<Icon name="lock" style={{textAlign: 'left'}} size={20} color="gray" />)}
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate(game, {
-            level: 3,
-            mode: this.mode
-          })} title="Level 3">
-          <Text style={styles.text} style={styles.text}>Level 3</Text>
+          <TouchableOpacity style={styles.button} onPress={() => this._onClickLevel(3)} title="Level 3">
+            <View style={{flexDirection:'row'}}>
+              <Text style={styles.text}>Level 3
+              </Text>
+              {!((mode === 'QC' && 3 <= this.props.level.levelQc) || (mode === 'FR' && 3 <= this.props.level.level)) && <Icon name="lock" style={{textAlign: 'left'}} size={20} color="gray" />}
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate(game, {
-            level: 4,
-            mode: this.mode
-          })} title="Level 4">
-          <Text style={styles.text}>Level 4</Text>
+          <TouchableOpacity style={styles.button} onPress={() => this._onClickLevel(4)} title="Level 4">
+            <View style={{flexDirection:'row'}}>
+              <Text style={styles.text}>Level 4
+              </Text>
+              {!((mode === 'QC' && 4 <= this.props.level.levelQc) || (mode === 'FR' && 4 <= this.props.level.level)) && <Icon name="lock" style={{textAlign: 'left'}} size={20} color="gray" />}
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate(game, {
-            level: 5,
-            mode: this.mode
-          })} title="Level 5">
-          <Text style={styles.text}>Level 5</Text>
+          <TouchableOpacity style={styles.button} onPress={() => this._onClickLevel(5)} title="Level 5">
+            <View style={{flexDirection:'row'}}>
+              <Text style={styles.text}>Level 5
+              </Text>
+              {!((mode === 'QC' && 5 <= this.props.level.levelQc) || (mode === 'FR' && 5 <= this.props.level.level)) && <Icon name="lock" style={{textAlign: 'left'}} size={20} color="gray" />}
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate(game, {
-            level: 6,
-            mode: this.mode
-          })} title="Level 6">
-          <Text style={styles.text}>Level 6</Text>
+          <TouchableOpacity style={styles.button} onPress={() => this._onClickLevel(6)} title="Level 6">
+            <View style={{flexDirection:'row'}}>
+              <Text style={styles.text}>Level 6
+              </Text>
+              {!((mode === 'QC' && 6 <= this.props.level.levelQc) || (mode === 'FR' && 6 <= this.props.level.level)) && <Icon name="lock" style={{textAlign: 'left'}} size={20} color="gray" />}
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate(game, {
-            level: 7,
-            mode: this.mode
-          })} title="Level 7">
-          <Text style={styles.text}>Level 7</Text>
+          <TouchableOpacity style={styles.button} onPress={() => this._onClickLevel(7)} title="Level 7">
+            <View style={{flexDirection:'row'}}>
+              <Text style={styles.text}>Level 7
+              </Text>
+              {!((mode === 'QC' && 7 <= this.props.level.levelQc) || (mode === 'FR' && 7 <= this.props.level.level)) && <Icon name="lock" style={{textAlign: 'left'}} size={20} color="gray" />}
+            </View>
           </TouchableOpacity>
-          {mode == "FR" ?
-          (<TouchableOpacity style={styles.button} onPress={() => Alert.alert("Pas encore de level 8")} title="Level 8">
-              <Text style={styles.text}>Level 8</Text>
-            </TouchableOpacity>
-        ) : (<Text></Text>)
-        }
         </ScrollView>
       </ImageBackground>
     )
@@ -142,19 +89,27 @@ export class ChooseLevel extends Component {
 const styles = StyleSheet.create({
   button: {
     margin: 30,
-    padding: 10
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: 'white',
   },
   text: {
     textAlign: 'center',
     justifyContent: 'center',
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: 'white',
     color: '#1f3955',
     padding : 10,
     fontSize: 15,
-    margin: -10
+    margin: -10,
+    flex:1
   }
 })
 
-export default ChooseLevel;
+const mapStateToProps = state => {
+  return {
+    level: state.level
+  }
+}
+
+
+export default connect(mapStateToProps)(ChooseLevel)

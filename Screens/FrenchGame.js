@@ -52,7 +52,7 @@ export class FrenchGame extends Component {
 
   getInitialState = () => {
 
-    if (this.props.navigation.getParam('mode') == 'FR'){
+    if (this.props.navigation.getParam('mode').mode == 'FR'){
       let dataName = "Francais_Level_" + this.props.navigation.getParam('level');
       data = datas[dataName]
     } else {
@@ -85,6 +85,8 @@ export class FrenchGame extends Component {
   }
 
   componentDidMount(){
+    console.log(this.props.navigation.getParam("mode").mode);
+    console.log(this.props.navigation.getParam('level'));
     this.getInitialState();
   }
 
@@ -100,6 +102,7 @@ export class FrenchGame extends Component {
       Alert.alert("Vous venez de passer la question, et de perdre une vie.");
       if (data.length == this.state.QuestionAlreadyAsk.length){
         this.setState({end: true})
+        this._unlockLevel()
         } else {
           start = getRandomInt(data.length, this.state.QuestionAlreadyAsk);
           this.setState({
@@ -179,27 +182,42 @@ export class FrenchGame extends Component {
   };
 
   _unlockLevel(){
-    console.log("Dans la fonction unlock");
-    const action = {
-      type: UNLOCK_LEVEL,
-      value: {
-        level: 1
-      }}
-    this.props.dispatch(action)
+    console.log("Dans la fonction unlock.");
+
+    if (this.props.navigation.getParam('mode').mode == "FR"){
+      const action = {
+        type: UNLOCK_LEVEL,
+        value: {
+          level: this.props.navigation.getParam('level')+1,
+          levelQc: this.props.level.levelQc
+        }
+      }
+      this.props.dispatch(action)
+    } else {
+      const action = {
+        type: UNLOCK_LEVEL,
+        value: {
+          level: this.props.level.level,
+          levelQc: this.props.navigation.getParam('level')+1
+        }
+      }
+      this.props.dispatch(action)
+    }
   }
+
 
   render() {
 
     const end = this.state.end
     const level = this.props.navigation.getParam('level')
-
+    const { goBack } = this.props.navigation;
 
     let Game;
     if (end) {
       Game = (
-        <View>
-          <Text style={{textAlign: 'center', justifyContent: 'center'}}>Félicitation, vous avez débloqué le niveau {this.props.navigation.getParam('level')+1}.</Text>
-        </View>
+        <TouchableOpacity  onPress={() => goBack()}>
+            <Text style={{textAlign: 'center', justifyContent: 'center'}}>Félicitation, vous avez débloqué le niveau {this.props.navigation.getParam('level')+1}.</Text>
+        </TouchableOpacity>
       );
     } else {
         Game = this._displayIfStillLives();
@@ -223,7 +241,7 @@ export class FrenchGame extends Component {
         <View style={{flexDirection: 'column', flex: 1}}>
 
           <View style={{flexDirection: 'row', marginTop: 20, flex:1}}>
-            {/*<Text style={{flex: 1}}>Level {this.props.navigation.getParam('level')}, mode {this.props.navigation.getParam('mode')}</Text>*/}
+            {/*<Text style={{flex: 1}}>Level {this.props.navigation.getParam('level')}, mode {this.props.navigation.getParam('mode').mode}</Text>*/}
             <Text style={styles.numberLife}>
               {/*Lifes*/}
               {/*this.props.level[0]*/}
@@ -284,7 +302,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    level: state.level
+    level: state.level,
+    levelQc: state.levelQc
   }
 }
 
