@@ -9,7 +9,8 @@ const SearchStackNavigator = createStackNavigator({
   Home: {
     screen: Home,
     navigationOptions: {
-      title: "Page d'accueil - Bienvenue"
+      title: "Page d'accueil - Bienvenue",
+      header: null
     }
   },
 

@@ -48,7 +48,7 @@ function shuffle(arr) {
 export class FrenchGame extends Component {
 
   // Nombre de vie initiale pour le jeu
-  numberOfLife = 6;
+  numberOfLife = 3;
 
   getInitialState = () => {
 
@@ -241,10 +241,8 @@ export class FrenchGame extends Component {
         <View style={{flexDirection: 'column', flex: 1}}>
 
           <View style={{flexDirection: 'row', marginTop: 20, flex:1}}>
-            {/*<Text style={{flex: 1}}>Level {this.props.navigation.getParam('level')}, mode {this.props.navigation.getParam('mode').mode}</Text>*/}
             <Text style={styles.numberLife}>
-              {/*Lifes*/}
-              {/*this.props.level[0]*/}
+              {Lifes}
             </Text>
             <TouchableOpacity style={{flex:1, alignItems: 'center'}} onPress={() => this._skipQuestion()}>
               <Icon name="arrow-right" size={40} color="black" />
