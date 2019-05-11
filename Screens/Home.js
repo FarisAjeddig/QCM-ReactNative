@@ -11,7 +11,7 @@ export class Home extends Component {
       <ImageBackground style={{flex: 1}} source={require('../Fonts/background-orange.jpeg')} >
         <View style={{flex: 3}}>
           <Text style={{flex: 1, textAlign: 'center', justifyContent: 'center', textAlignVertical: 'center', fontSize: 30, color:'white'}}>
-            React Tabarnac
+            React Native
           </Text>
         </View>
         <View style={{flex: 1, flexDirection: 'row'}}>
